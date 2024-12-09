@@ -1,0 +1,55 @@
+<table class="min-w-full bg-white">
+  <thead class="relative">
+    <tr class="w-full bg-gray-800">
+      <th
+        *ngFor="let column of config.columns"
+        class="py-3 px-4 text-left text-xs font-semibold text-white uppercase tracking-wider"
+      >
+        <div class="flex flex-row justify-center items-center">
+          {{column.name}}
+          <div class="relative ml-5">
+            <img
+              *ngIf="column.filterable"
+              (click)="showFilter = !showFilter"
+              ngSrc="/assets/icons/filters.svg"
+              height="20" width="20"
+              alt="filters"
+            >
+            <div
+              class="absolute top-6 left-1"
+              *ngIf="showFilter && column.filterable"
+            >
+              <input
+                class="text-black p-2 shadow-sm w-72"
+                (change)="setFilters(column.data, $event)"
+                [value]="getFilterValue(column)"
+                placeholder="Filtering from or containing text"
+              >
+            </div>
+          </div>
+        </div>
+      </th>
+    </tr>
+    <div class="absolute right-2 bottom-3">
+      <img *ngIf="isFiltered"
+           (click)="resetFilters()"
+           ngSrc="/assets/icons/clear_filters.svg"
+           height="25" width="25"
+           alt="clear filters"
+      >
+    </div>
+  </thead>
+  <tbody class="bg-white text-center">
+    <tr
+      *ngFor="let row of getFilteredRows()"
+      class="bg-gray-100 border-b hover:bg-gray-200"
+    >
+      <td
+        *ngFor="let column of config.columns"
+        class="py-3 px-4 text-sm text-gray-700"
+      >
+        {{getRowData(row, column)}}
+      </td>
+    </tr>
+  </tbody>
+</table>
